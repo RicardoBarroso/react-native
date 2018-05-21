@@ -733,6 +733,21 @@ UIImage *__nullable RCTImageFromLocalAssetURL(NSURL *imageURL)
   return image;
 }
 
+
+NSString *__nullable RCTImageFilenameFromLocalAssetURL(NSURL *imageURL)
+{
+    NSString *imageName = RCTBundlePathForURL(imageURL);
+    NSArray *imagePathComponents = [imageName pathComponents];
+    
+    if ([imagePathComponents count] > 1 && [[[imagePathComponents firstObject] pathExtension] isEqualToString:@"bundle"]) {
+        NSString *bundlePath = [imagePathComponents firstObject];
+        imageName = [imageName substringFromIndex:(bundlePath.length + 1)];
+    }
+    
+    return imageName;
+}
+
+
 RCT_EXTERN NSString *__nullable RCTTempFilePath(NSString *extension, NSError **error)
 {
   static NSError *setupError = nil;

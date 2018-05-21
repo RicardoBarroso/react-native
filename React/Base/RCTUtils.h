@@ -133,6 +133,12 @@ RCT_EXTERN BOOL RCTIsLocalAssetURL(NSURL *__nullable imageURL);
 // does not correspond to a local asset.
 RCT_EXTERN UIImage *__nullable RCTImageFromLocalAssetURL(NSURL *imageURL);
 
+// Returns the image filename for a local image asset. Returns nil if the URL
+// does not correspond to a local asset.
+// Currently this duplicates "RCTImageFromLocalAssetURL(NSURL *imageURL)" initial
+// code, so thos sould be refactored for not having duplicated code.
+RCT_EXTERN NSString *__nullable RCTImageFilenameFromLocalAssetURL(NSURL *imageURL);
+
 // Creates a new, unique temporary file path with the specified extension
 RCT_EXTERN NSString *__nullable RCTTempFilePath(NSString *__nullable extension, NSError **error);
 
