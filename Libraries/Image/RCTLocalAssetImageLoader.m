@@ -8,8 +8,13 @@
 #import "RCTLocalAssetImageLoader.h"
 
 #import <stdatomic.h>
-
 #import <React/RCTUtils.h>
+
+
+@interface RCTLocalAssetImageLoader ()
+@property (nonatomic, retain) NSCache *imagesCache;
+@end
+
 
 @implementation RCTLocalAssetImageLoader
 
@@ -48,7 +53,21 @@ RCT_EXPORT_MODULE()
       return;
     }
 
-    UIImage *image = RCTImageFromLocalAssetURL(imageURL);
+    
+    NSString *imageFilename = RCTImageFilenameFromLocalAssetURL(imageURL);
+    UIImage *image;
+    
+    if (imageFilename) {
+      image = [self imageForKey:imageFilename];
+    }
+    
+    if (!image) {
+      //NOTE: This should be optimized for not needing this second call.
+      image = RCTImageFromLocalAssetURL(imageURL);
+    }
+    
+    
+    //UIImage *image = RCTImageFromLocalAssetURL(imageURL);
     if (image) {
       if (progressHandler) {
         progressHandler(1, 1);
@@ -65,5 +84,25 @@ RCT_EXPORT_MODULE()
     atomic_store(&cancelled, YES);
   };
 }
+
+
+
+- (UIImage *)imageForKey:(NSString *)key {
+  UIImage *image;
+  
+  if (self.imagesCache != nil) {
+    image = [self.imagesCache objectForKey:key];
+  } else {
+    self.imagesCache = [NSCache new];
+  }
+  
+  if (!image) {
+    image = [UIImage imageNamed:key];
+    [self.imagesCache setObject:image forKey:key];
+  }
+  
+  return image;
+}
+
 
 @end

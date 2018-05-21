@@ -34,6 +34,12 @@
 
 @end
 
+
+@interface RCTImageLoader ()
+@property (nonatomic, retain) NSCache *imagesCache;
+@end
+
+
 @implementation RCTImageLoader
 {
     NSArray<id<RCTImageURLLoader>> *_loaders;
@@ -85,6 +91,25 @@ RCT_EXPORT_MODULE()
 {
     return 2;
 }
+
+
+- (UIImage *)imageForKey:(NSString *)key {
+  UIImage *image;
+  
+  if (self.imagesCache != nil) {
+    image = [self.imagesCache objectForKey:key];
+  } else {
+    self.imagesCache = [NSCache new];
+  }
+  
+  if (!image) {
+    image = [UIImage imageNamed:key];
+    [self.imagesCache setObject:image forKey:key];
+  }
+  
+  return image;
+}
+
 
 - (id<RCTImageCache>)imageCache
 {

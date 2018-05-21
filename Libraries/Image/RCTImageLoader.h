@@ -84,6 +84,10 @@ typedef dispatch_block_t RCTImageLoaderCancellationBlock;
 - (instancetype)init;
 - (instancetype)initWithRedirectDelegate:(id<RCTImageRedirectProtocol>)redirectDelegate NS_DESIGNATED_INITIALIZER;
 
+
+- (UIImage *)imageForKey:(NSString *)key;
+
+
 /**
  * Loads the specified image at the highest available resolution.
  * Can be called from any thread, will call back on an unspecified thread.
@@ -175,6 +179,9 @@ typedef dispatch_block_t RCTImageLoaderCancellationBlock;
                                    progressHandler:(RCTImageLoaderProgressBlock)progressHandler
                                 partialLoadHandler:(RCTImageLoaderPartialLoadBlock)partialLoadHandler
                                  completionHandler:(RCTImageLoaderCompletionBlock)completionHandler;
+
+- (UIImage *)imageForKey:(NSString *)key;
+
 
 @optional
 
